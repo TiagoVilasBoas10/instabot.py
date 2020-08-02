@@ -1,9 +1,12 @@
+#/bin/python3.8
 import requests
 import random
 import time
 import datetime
 import logging
 import json
+import bs4
+import re
 
 class InstaBot:
     """
@@ -57,7 +60,7 @@ class InstaBot:
     def __init__(self, login, password,
                 like_per_day=1000,
                 more_than_likes=10,
-                tag_list=['cat', 'car', 'dog'],
+                tag_list=['portrait', 'photography', 'art'],
                 max_like_for_one_tag = 5,
                 log_mod = 0):
         self.like_per_day = like_per_day
@@ -108,12 +111,12 @@ class InstaBot:
                                'X-Instagram-AJAX' : '1',
                                'X-Requested-With' : 'XMLHttpRequest'})
         r = self.s.get(self.url)
-        self.s.headers.update({'X-CSRFToken' : r.cookies['csrftoken']})
+        self.s.headers.update({'X-CSRFToken' : self.get_token(r.content)})
         time.sleep(5 * random.random())
         login = self.s.post(self.url_login, data=self.login_post,
                             allow_redirects=True)
-        self.s.headers.update({'X-CSRFToken' : login.cookies['csrftoken']})
-        self.csrftoken = login.cookies['csrftoken']
+        self.s.headers.update({'X-CSRFToken' :self.get_token(login.content)})
+        self.csrftoken = self.get_token(login.content)
         time.sleep(5 * random.random())
 
         if login.status_code == 200:
@@ -275,6 +278,12 @@ class InstaBot:
                 self.get_media_id_by_tag(random.choice(self.tag_list))
                 self.like_all_exist_media(random.randint \
                                          (1, self.max_like_for_one_tag))
+    
+    def get_token(self,html):
+        soup=bs4.BeautifulSoup(html,features='html5')
+        token=re.findall('csrf_token":".*?"',str(html))
+        token=token[0].split(':')[-1].replace('"','')
+        return token
 
     def write_log(self, log_text):
         """ Write log by print() or logger """
