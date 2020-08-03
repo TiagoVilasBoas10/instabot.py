@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1ed5ad104ba74df23148c0b73499bdc16d0db74d
 b=bot(login=os.getenv("BOTUSER"),password=os.getenv("BOTPASS"))
 
 print('logged-in')
