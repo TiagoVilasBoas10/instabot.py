@@ -1,9 +1,12 @@
-#/bin/python3.8
+#/bin/python3.8.2
+import os
 from instabot import InstaBot as bot
-import env
+from dotenv import load_dotenv
+load_dotenv()
 
 
-b=bot(login=env.USER,password=env.PASS)
+
+b=bot(login=os.getenv("BOTUSER"),password=os.getenv("BOTPASS"))
 
 print('logged-in')
 
