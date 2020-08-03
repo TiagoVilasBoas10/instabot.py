@@ -8,6 +8,7 @@ import json
 import bs4
 import re
 
+
 class InstaBot:
     """
     Instagram bot v 0.04

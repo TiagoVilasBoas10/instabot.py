@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-
 b=bot(login=os.getenv("BOTUSER"),password=os.getenv("BOTPASS"))
 
 print('logged-in')
